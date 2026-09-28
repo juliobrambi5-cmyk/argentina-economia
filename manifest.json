@@ -1,0 +1,10 @@
+{
+  "name": "Argentina Economía",
+  "short_name": "Arg Economía",
+  "start_url": "/argentina-economia/",
+  "scope": "/argentina-economia/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1f2937",
+  "description": "Aplicación de datos económicos, fiscales e inversiones de Argentina."
+}
