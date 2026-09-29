@@ -108,45 +108,7 @@ function selectProvince(p,el){
   if(p==='Argentina'){
     d.innerHTML='<h3>Argentina</h3><p>Seleccioná una provincia para abrir su ficha. En esta versión, la capa geográfica es conceptual; la integración posterior usará datos provinciales oficiales.</p><div class="rows"><div class="row"><span>Fuentes provinciales disponibles<small>Mapa fiscal y series de Economía</small></span><b>24 jurisdicciones</b></div><div class="row"><span>Recursos tributarios provinciales<small>Serie mensual y trimestral</small></span><b>Disponible</b></div><div class="row"><span>Recursos de origen nacional<small>Distribución a provincias</small></span><b>Disponible</b></div></div>';
   } else {
-    const pData = {
-      'Misiones': { fiscal: '$45.280M (Suba interanual +12%)', inversion: '$18.500M', comercio: '$320M', empleo: '108.500 puestos' },
-      'Jujuy': { fiscal: '$38.100M (Suba interanual +9%)', inversion: '$14.200M', comercio: '$450M', empleo: '94.200 puestos' },
-      'Buenos Aires': { fiscal: '$850.400M (Suba interanual +15%)', inversion: '$310.000M', comercio: '$4.200M', empleo: '3.450.000 puestos' }
-    };
-    const info = pData[p] || { fiscal: 'Datos en proceso de carga oficial', inversion: 'Sin registro activo', comercio: 'En relevamiento', empleo: 'Actualización trimestral' };
-
-    d.innerHTML = '<h3>'+p+'</h3>'+
-      '<p>Ficha de datos oficiales y evolución regional.</p>'+
-      '<div class="tabs"><button class="tab active">Resumen</button><button class="tab">Fiscal</button><button class="tab">Inversión</button><button class="tab">Comercio</button><button class="tab">Empleo</button></div>'+
-      '<div class="rows">'+
-        '<div class="row"><span>Recursos tributarios provinciales<small>Fuente: Dirección de Recursos Provinciales</small></span><b>'+info.fiscal+'</b></div>'+
-        '<div class="row"><span>Recursos de origen nacional<small>Fuente: Ministerio de Economía</small></span><b>'+info.inversion+'</b></div>'+
-        '<div class="row"><span>Gasto y deuda provincial<small>Fuente: Mapa Fiscal</small></span><b>'+info.comercio+'</b></div>'+
-        '<div class="row"><span>Exportaciones de origen provincial<small>Fuente: INDEC</small></span><b>'+info.empleo+'</b></div>'+
-      '</div>'+
-      '<div style="background:var(--surface2); padding:15px; border-radius:12px; margin-top:15px;">'+
-        '<canvas id="provChart" style="max-height:200px; width:100%;"></canvas>'+
-      '</div>';
-
-    setTimeout(() => {
-      const ctx = document.getElementById('provChart');
-      if(ctx && window.Chart) {
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Trim 1', 'Trim 2', 'Trim 3', 'Trim 4'],
-            datasets: [{
-              label: 'Evolución Económica (' + p + ')',
-              data: [14, 18, 16, 23],
-              backgroundColor: 'rgba(21, 145, 208, 0.7)',
-              borderColor: 'rgba(21, 145, 208, 1)',
-              borderWidth: 1
-            }]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
-      }
-    }, 100);
+    d.innerHTML='<h3>'+p+'</h3><p>Ficha provincial en desarrollo.</p>';
   }
 }
 
