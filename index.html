@@ -86,7 +86,7 @@ function selectProvince(p,el){
     d.innerHTML='<h3>Argentina</h3><p>Seleccioná una provincia para abrir su ficha. En esta versión, la capa geográfica es conceptual; la integración posterior usará datos provinciales oficiales.</p><div class="rows"><div class="row"><span>Fuentes provinciales disponibles<small>Mapa fiscal y series de Economía</small></span><b>24 jurisdicciones</b></div><div class="row"><span>Recursos tributarios provinciales<small>Serie mensual y trimestral</small></span><b>Disponible</b></div><div class="row"><span>Recursos de origen nacional<small>Distribución a provincias</small></span><b>Disponible</b></div></div>';
   } else {
    
-       const pData = {
+    const pData = {
       'Misiones': { fiscal: '$45.280M (Suba interanual +12%)', inversion: '$18.500M', comercio: '$320M', empleo: '108.500 puestos' },
       'Jujuy': { fiscal: '$38.100M (Suba interanual +9%)', inversion: '$14.200M', comercio: '$450M', empleo: '94.200 puestos' },
       'Buenos Aires': { fiscal: '$850.400M (Suba interanual +15%)', inversion: '$310.000M', comercio: '$4.200M', empleo: '3.450.000 puestos' },
@@ -117,8 +117,14 @@ function selectProvince(p,el){
 
     d.innerHTML = '<h3>'+p+'</h3>'+
       '<p>Ficha de datos oficiales y evolución regional.</p>'+
-      '<div class="tabs"><button class="tab active">Resumen</button><button class="tab">Fiscal</button><button class="tab">Inversión</button><button class="tab">Comercio</button><button class="tab">Empleo</button></div>'+
-      '<div class="rows">'+
+      '<div class="tabs" id="provTabs">'+
+        '<button class="tab active" data-tab="resumen">Resumen</button>'+
+        '<button class="tab" data-tab="fiscal">Fiscal</button>'+
+        '<button class="tab" data-tab="inversion">Inversión</button>'+
+        '<button class="tab" data-tab="comercio">Comercio</button>'+
+        '<button class="tab" data-tab="empleo">Empleo</button>'+
+      '</div>'+
+      '<div class="rows" id="provRows">'+
         '<div class="row"><span>Recursos tributarios provinciales<small>Fuente: Dirección de Recursos Provinciales</small></span><b>'+info.fiscal+'</b></div>'+
         '<div class="row"><span>Recursos de origen nacional<small>Fuente: Ministerio de Economía</small></span><b>'+info.inversion+'</b></div>'+
         '<div class="row"><span>Gasto y deuda provincial<small>Fuente: Mapa Fiscal</small></span><b>'+info.comercio+'</b></div>'+
@@ -127,6 +133,32 @@ function selectProvince(p,el){
       '<div style="background:var(--surface2); padding:15px; border-radius:12px; margin-top:15px;">'+
         '<canvas id="provChart" style="max-height:200px; width:100%;"></canvas>'+
       '</div>';
+
+    // Lógica para que los botones de la ficha cambien el contenido de abajo dinámicamente
+    const containerRows = document.getElementById('provRows');
+    document.querySelectorAll('#provTabs .tab').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#provTabs .tab').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        const tabType = e.target.getAttribute('data-tab');
+
+        if(tabType === 'resumen') {
+          containerRows.innerHTML = 
+            '<div class="row"><span>Recursos tributarios provinciales<small>Fuente: Dirección de Recursos Provinciales</small></span><b>'+info.fiscal+'</b></div>'+
+            '<div class="row"><span>Recursos de origen nacional<small>Fuente: Ministerio de Economía</small></span><b>'+info.inversion+'</b></div>'+
+            '<div class="row"><span>Gasto y deuda provincial<small>Fuente: Mapa Fiscal</small></span><b>'+info.comercio+'</b></div>'+
+            '<div class="row"><span>Exportaciones de origen provincial<small>Fuente: INDEC</small></span><b>'+info.empleo+'</b></div>';
+        } else if(tabType === 'fiscal') {
+          containerRows.innerHTML = '<div class="row"><span>Recursos tributarios y situación fiscal<small>Fuente oficial provincial</small></span><b>'+info.fiscal+'</b></div>';
+        } else if(tabType === 'inversion') {
+          containerRows.innerHTML = '<div class="row"><span>Inversión y recursos nacionales asignados<small>Ministerio de Economía</small></span><b>'+info.inversion+'</b></div>';
+        } else if(tabType === 'comercio') {
+          containerRows.innerHTML = '<div class="row"><span>Comercio, gasto y actividad mercantil<small>Registros provinciales</small></span><b>'+info.comercio+'</b></div>';
+        } else if(tabType === 'empleo') {
+          containerRows.innerHTML = '<div class="row"><span>Puestos de empleo registrados<small>Fuente: INDEC / SIPA</small></span><b>'+info.empleo+'</b></div>';
+        }
+      });
+    });
 
     setTimeout(() => {
       const ctx = document.getElementById('provChart');
