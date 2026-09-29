@@ -79,4 +79,11 @@ function setLayer(el,layer){document.querySelectorAll('#mapa .pill').forEach(x=>
 function renderInvestments(){const q=(document.getElementById('investmentSearch').value||'').toLowerCase();const list=investments.filter(x=>(x.name+x.company+x.province+x.sector).toLowerCase().includes(q));document.getElementById('investmentList').innerHTML=list.map(x=>'<div class="project"><div class="icon">🏗️</div><div><h4>'+x.name+'</h4><p>'+x.company+' · '+x.province+' · '+x.sector+'<br>'+x.amount+' · <a href="'+x.url+'" target="_blank" style="color:var(--blue2)">'+x.source+' ↗</a></p></div><span class="status">'+x.status+'</span></div>').join('')||'<div class="empty">No hay coincidencias.</div>'}
 function taxTab(type,el){document.querySelectorAll('#impuestos .pill').forEach(x=>x.classList.remove('active'));el.classList.add('active');const data={nacion:[['Recaudación tributaria nacional','$153.045.987 M','Acumulado enero-agosto 2026 · fuente oficial'],['Último mes','$20.508.537 M','Agosto 2026 · fuente oficial'],['Series históricas','Desde 1997','Desagregadas por mes']],provincia:[['Recursos tributarios provinciales','Serie 2026','Información mensual y trimestral · fuente oficial'],['Metodología','Publicada','La fuente replica datos de administraciones tributarias provinciales en la serie mensual'],['Series históricas','1984–2025','Excel y CSV disponibles']],distribucion:[['Recursos de origen nacional','Serie 2026','Incluye distribución a provincias'],['Coparticipación','Ley 23.548','La app distinguirá distribución primaria/secundaria según la fuente'],['Anticipos financieros','Registro normativo','Se mostrarán como financiamiento, no como recaudación']]}[type];document.getElementById('taxContent').innerHTML=data.map(x=>'<div class="card metric"><div class="label">'+x[0]+'</div><div class="value">'+x[1]+'</div><div class="sub">'+x[2]+'</div></div>').join('')}
 renderMap();renderInvestments();taxTab('nacion',document.querySelector('#impuestos .pill'));
-</script></body></html>
+</script><script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+</script>
+</body></html>
