@@ -61,7 +61,6 @@ main{padding:15px}.view{display:none}.view.active{display:block}.hero{background
 <div class="card source"><div class="rank">2</div><div><h4>Associated Press · corroboración</h4><p>Agencia internacional utilizada para contexto y verificación cruzada de hechos noticiosos.</p><a href="https://apnews.com/hub/argentina" target="_blank">AP · Argentina ↗</a></div></div>
 <div class="card source"><div class="rank">2</div><div><h4>Medios argentinos · contexto</h4><p>Se podrán incorporar cuando aporten información original verificable; los datos relevantes deberán contrastarse con la fuente primaria.</p></div></div>
 </div><div class="note"><b>Sobre el “90% de confiabilidad”:</b> no existe una medida objetiva universal que permita afirmar que un medio es exactamente 90% confiable. Por eso la app utilizará una política más verificable: fuente primaria para cifras + segunda fuente independiente para hechos relevantes + fecha y enlace visibles.</div></section>
-
 <section id="noticias" class="view"><div class="section-head"><h3>Noticias económicas verificadas</h3><span>Contexto, no sustituto estadístico</span></div><div class="news"><button><b>INDEC actualiza comercio exterior</b><small>Fuente primaria · agosto 2026 · exportaciones, importaciones y saldo comercial.</small></button><button><b>BCRA publica balance cambiario</b><small>Fuente primaria · agosto 2026 · mercado de cambios y reservas.</small></button><button><b>Reuters / AP para corroboración</b><small>Las noticias periodísticas se enlazan junto con el documento o dato primario cuando corresponde.</small></button></div></section>
 </main>
 <nav class="bottom"><button class="active" onclick="nav('inicio')"><b>⌂</b>Inicio</button><button onclick="nav('mapa')"><b>⌖</b>Mapa</button><button onclick="nav('inversiones')"><b>⌁</b>Inversiones</button><button onclick="nav('impuestos')"><b>▣</b>Impuestos</button><button onclick="nav('fuentes')"><b>ⓘ</b>Fuentes</button></nav>
@@ -75,66 +74,12 @@ const investments=[
  {name:'Inversión pública',company:'Sector público nacional',province:'Argentina',sector:'Infraestructura / capital',status:'Serie oficial',amount:'Serie 1995–2026',source:'Portal de Inversión Pública',url:'https://www.argentina.gob.ar/jefatura/presupuestaria/inversion-publica/portal-de-datos-de-inversion-publica'}
 ];
 function nav(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));const map={inicio:0,mapa:1,inversiones:2,impuestos:3,fuentes:4};if(map[id]!=null)document.querySelectorAll('.bottom button')[map[id]].classList.add('active');scrollTo(0,0)}
-function nav(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));const map={inicio:0,mapa:1,inversiones:2,impuestos:3,fuentes:4};if(map[id]!=null)document.querySelectorAll('.bottom button')[map[id]].classList.add('active');scrollTo(0,0)}
-
 function renderMap(){const box=document.getElementById('provinces');box.innerHTML='';provinces.forEach((p,i)=>{const b=document.createElement('button');b.className='prov';b.textContent=p;b.style.left=pos[i][0]+'%';b.style.top=pos[i][1]+'%';b.onclick=()=>selectProvince(p,b);box.appendChild(b)});selectProvince('Argentina',null)}
-
-function selectProvince(p,el){
-  document.querySelectorAll('.prov').forEach(x=>x.classList.remove('selected'));
-  if(el)el.classList.add('selected');
-  const d=document.getElementById('provinceDetail');
-  if(!d) return;
-
-  if(p==='Argentina'){
-    d.innerHTML='<h3>Argentina</h3><p>Seleccioná una provincia para abrir su ficha. En esta versión, la capa geográfica es conceptual; la integración posterior usará datos provinciales oficiales.</p><div class="rows"><div class="row"><span>Fuentes provinciales disponibles<small>Mapa fiscal y series de Economía</small></span><b>24 jurisdicciones</b></div><div class="row"><span>Recursos tributarios provinciales<small>Serie mensual y trimestral</small></span><b>Disponible</b></div><div class="row"><span>Recursos de origen nacional<small>Distribución a provincias</small></span><b>Disponible</b></div></div>';
-  } else {
-    const pData = {
-      'Misiones': { fiscal: '$45.280M (Suba interanual +12%)', inversion: '$18.500M', comercio: '$320M', empleo: '108.500 puestos' },
-      'Jujuy': { fiscal: '$38.100M (Suba interanual +9%)', inversion: '$14.200M', comercio: '$450M', empleo: '94.200 puestos' },
-      'Buenos Aires': { fiscal: '$850.400M (Suba interanual +15%)', inversion: '$310.000M', comercio: '$4.200M', empleo: '3.450.000 puestos' }
-    };
-    const info = pData[p] || { fiscal: 'Datos en proceso de carga oficial', inversion: 'Sin registro activo', comercio: 'En relevamiento', empleo: 'Actualización trimestral' };
-
-    d.innerHTML = '<h3>'+p+'</h3>'+
-      '<p>Ficha de datos oficiales y evolución regional.</p>'+
-      '<div class="tabs"><button class="tab active">Resumen</button><button class="tab">Fiscal</button><button class="tab">Inversión</button><button class="tab">Comercio</button><button class="tab">Empleo</button></div>'+
-      '<div class="rows">'+
-        '<div class="row"><span>Recursos tributarios provinciales<small>Fuente: Dirección de Recursos Provinciales</small></span><b>'+info.fiscal+'</b></div>'+
-        '<div class="row"><span>Recursos de origen nacional<small>Fuente: Ministerio de Economía</small></span><b>'+info.inversion+'</b></div>'+
-        '<div class="row"><span>Gasto y deuda provincial<small>Fuente: Mapa Fiscal</small></span><b>'+info.comercio+'</b></div>'+
-        '<div class="row"><span>Exportaciones de origen provincial<small>Fuente: INDEC</small></span><b>'+info.empleo+'</b></div>'+
-      '</div>'+
-      '<div style="background:var(--surface2); padding:15px; border-radius:12px; margin-top:15px;">'+
-        '<canvas id="provChart" style="max-height:200px; width:100%;"></canvas>'+
-      '</div>';
-
-    setTimeout(() => {
-      const ctx = document.getElementById('provChart');
-      if(ctx && window.Chart) {
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Trim 1', 'Trim 2', 'Trim 3', 'Trim 4'],
-            datasets: [{
-              label: 'Evolución Económica (' + p + ')',
-              data: [14, 18, 16, 23],
-              backgroundColor: 'rgba(21, 145, 208, 0.7)',
-              borderColor: 'rgba(21, 145, 208, 1)',
-              borderWidth: 1
-            }]
-          },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
-      }
-    }, 100);
-  }
-}
-
+function selectProvince(p,el){document.querySelectorAll('.prov').forEach(x=>x.classList.remove('selected'));if(el)el.classList.add('selected');const d=document.getElementById('provinceDetail');if(p==='Argentina'){d.innerHTML='<h3>Argentina</h3><p>Seleccioná una provincia para abrir su ficha. En esta versión, la capa geográfica es conceptual; la integración posterior usará datos provinciales oficiales.</p><div class="rows"><div class="row"><span>Fuentes provinciales disponibles<small>Mapa fiscal y series de Economía</small></span><b>24 jurisdicciones</b></div><div class="row"><span>Recursos tributarios provinciales<small>Serie mensual y trimestral</small></span><b>Disponible</b></div><div class="row"><span>Recursos de origen nacional<small>Distribución a provincias</small></span><b>Disponible</b></div></div>'}else{d.innerHTML='<h3>'+p+'</h3><p>Ficha preparada para cargar datos oficiales de la jurisdicción.</p><div class="tabs"><button class="tab active">Resumen</button><button class="tab">Fiscal</button><button class="tab">Inversión</button><button class="tab">Comercio</button><button class="tab">Empleo</button></div><div class="rows"><div class="row"><span>Recursos tributarios provinciales<small>Fuente: Dirección de Recursos Provinciales</small></span><b>Ver serie</b></div><div class="row"><span>Recursos de origen nacional<small>Fuente: Ministerio de Economía</small></span><b>Ver serie</b></div><div class="row"><span>Gasto y deuda provincial<small>Fuente: Mapa Fiscal</small></span><b>Ver datos</b></div><div class="row"><span>Exportaciones de origen provincial<small>Fuente: INDEC</small></span><b>Ver datos</b></div></div>'}}
 function setLayer(el,layer){document.querySelectorAll('#mapa .pill').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('layerLabel').textContent='Vista conceptual · '+({actividad:'actividad',inversion:'inversión',fiscal:'fiscal',export:'exportaciones'}[layer])}
 function renderInvestments(){const q=(document.getElementById('investmentSearch').value||'').toLowerCase();const list=investments.filter(x=>(x.name+x.company+x.province+x.sector).toLowerCase().includes(q));document.getElementById('investmentList').innerHTML=list.map(x=>'<div class="project"><div class="icon">🏗️</div><div><h4>'+x.name+'</h4><p>'+x.company+' · '+x.province+' · '+x.sector+'<br>'+x.amount+' · <a href="'+x.url+'" target="_blank" style="color:var(--blue2)">'+x.source+' ↗</a></p></div><span class="status">'+x.status+'</span></div>').join('')||'<div class="empty">No hay coincidencias.</div>'}
 function taxTab(type,el){document.querySelectorAll('#impuestos .pill').forEach(x=>x.classList.remove('active'));el.classList.add('active');const data={nacion:[['Recaudación tributaria nacional','$153.045.987 M','Acumulado enero-agosto 2026 · fuente oficial'],['Último mes','$20.508.537 M','Agosto 2026 · fuente oficial'],['Series históricas','Desde 1997','Desagregadas por mes']],provincia:[['Recursos tributarios provinciales','Serie 2026','Información mensual y trimestral · fuente oficial'],['Metodología','Publicada','La fuente replica datos de administraciones tributarias provinciales en la serie mensual'],['Series históricas','1984–2025','Excel y CSV disponibles']],distribucion:[['Recursos de origen nacional','Serie 2026','Incluye distribución a provincias'],['Coparticipación','Ley 23.548','La app distinguirá distribución primaria/secundaria según la fuente'],['Anticipos financieros','Registro normativo','Se mostrarán como financiamiento, no como recaudación']]}[type];document.getElementById('taxContent').innerHTML=data.map(x=>'<div class="card metric"><div class="label">'+x[0]+'</div><div class="value">'+x[1]+'</div><div class="sub">'+x[2]+'</div></div>').join('')}
 renderMap();renderInvestments();taxTab('nacion',document.querySelector('#impuestos .pill'));
-
 </script>
   <script>
     if ("serviceWorker" in navigator) {
