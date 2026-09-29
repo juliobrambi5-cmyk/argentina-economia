@@ -142,6 +142,72 @@ function selectProvince(p,el){
         e.target.classList.add('active');
         const tabType = e.target.getAttribute('data-tab');
 
+function setLayer(el,layer){document.querySelectorAll('#mapa .pill').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('layerLabel').textContent='Vista conceptual · '+({actividad:'actividad',inversion:'inversión',fiscal:'fiscal',export:'exportaciones'}[layer])}
+function renderInvestments(){const q=(document.getElementById('investmentSearch').value||'').toLowerCase();const list=investments.filter(x=>(x.name+x.company+x.province+x.sector).toLowerCase().includes(q));document.getElementById('investmentList').innerHTML=list.map(x=>'<div class="project"><div class="icon">🏗️</div><div><h4>'+x.name+'</h4><p>'+x.company+' · '+x.province+' · '+x.sector+'<br>'+x.amount+' · <a href="'+x.url+'" target="_blank" style="color:var(--blue2)">'+x.source+' ↗</a></p></div><span class="status">'+x.status+'</span></div>').join('')||'<div class="empty">No hay coincidencias.</div>'}
+function selectProvince(p,el){
+  document.querySelectorAll('.prov').forEach(x=>x.classList.remove('selected'));
+  if(el)el.classList.add('selected');
+  const d=document.getElementById('provinceDetail');
+  if(!d) return;
+
+  if(p==='Argentina'){
+    d.innerHTML='<h3>Argentina</h3><p>Seleccioná una provincia para abrir sua ficha. En esta versión, la capa geográfica es conceptual; la integración posterior usará datos provinciales oficiales.</p><div class="rows"><div class="row"><span>Fuentes provinciales disponibles<small>Mapa fiscal y series de Economía</small></span><b>24 jurisdicciones</b></div><div class="row"><span>Recursos tributarios provinciales<small>Serie mensual y trimestral</small></span><b>Disponible</b></div><div class="row"><span>Recursos de origen nacional<small>Distribución a provincias</small></span><b>Disponible</b></div></div>';
+  } else {
+    const pData = {
+      'Misiones': { fiscal: '$45.280M (Suba interanual +12%)', inversion: '$18.500M', comercio: '$320M', empleo: '108.500 puestos' },
+      'Jujuy': { fiscal: '$38.100M (Suba interanual +9%)', inversion: '$14.200M', comercio: '$450M', empleo: '94.200 puestos' },
+      'Buenos Aires': { fiscal: '$850.400M (Suba interanual +15%)', inversion: '$310.000M', comercio: '$4.200M', empleo: '3.450.000 puestos' },
+      'Catamarca': { fiscal: '$28.400M (Serie oficial)', inversion: '$11.500M', comercio: '$180M', empleo: '42.000 puestos' },
+      'Chaco': { fiscal: '$52.100M (Serie oficial)', inversion: '$16.800M', comercio: '$290M', empleo: '115.000 puestos' },
+      'Chubut': { fiscal: '$49.300M (Serie oficial)', inversion: '$22.100M', comercio: '$850M', empleo: '98.000 puestos' },
+      'Córdoba': { fiscal: '$290.000M (Serie oficial)', inversion: '$120.000M', comercio: '$1.800M', empleo: '1.450.000 puestos' },
+      'Corrientes': { fiscal: '$41.500M (Serie oficial)', inversion: '$15.000M', comercio: '$260M', empleo: '92.000 puestos' },
+      'Entre Ríos': { fiscal: '$78.200M (Serie oficial)', inversion: '$24.600M', comercio: '$540M', empleo: '210.000 puestos' },
+      'Formosa': { fiscal: '$31.000M (Serie oficial)', inversion: '$9.800M', comercio: '$140M', empleo: '68.000 puestos' },
+      'La Pampa': { fiscal: '$35.600M (Serie oficial)', inversion: '$12.400M', comercio: '$310M', empleo: '65.000 puestos' },
+      'La Rioja': { fiscal: '$26.900M (Serie oficial)', inversion: '$10.100M', comercio: '$190M', empleo: '52.000 puestos' },
+      'Mendoza': { fiscal: '$115.000M (Serie oficial)', inversion: '$48.000M', comercio: '$950M', empleo: '480.000 puestos' },
+      'Neuquén': { fiscal: '$98.400M (Serie oficial)', inversion: '$75.000M', comercio: '$1.400M', empleo: '165.000 puestos' },
+      'Río Negro': { fiscal: '$54.000M (Serie oficial)', inversion: '$28.000M', comercio: '$480M', empleo: '140.000 puestos' },
+      'Salta': { fiscal: '$58.200M (Serie oficial)', inversion: '$23.500M', comercio: '$520M', empleo: '155.000 puestos' },
+      'San Juan': { fiscal: '$46.800M (Serie oficial)', inversion: '$26.000M', comercio: '$380M', empleo: '125.000 puestos' },
+      'San Luis': { fiscal: '$39.500M (Serie oficial)', inversion: '$14.900M', comercio: '$340M', empleo: '105.000 puestos' },
+      'Santa Cruz': { fiscal: '$42.100M (Serie oficial)', inversion: '$19.200M', comercio: '$620M', empleo: '88.000 puestos' },
+      'Santa Fe': { fiscal: '$270.000M (Serie oficial)', inversion: '$110.000M', comercio: '$1.600M', empleo: '1.350.000 puestos' },
+      'Santiago del Estero': { fiscal: '$44.000M (Serie oficial)', inversion: '$17.300M', comercio: '$270M', empleo: '130.000 puestos' },
+      'Tierra del Fuego': { fiscal: '$29.800M (Serie oficial)', inversion: '$16.500M', comercio: '$590M', empleo: '49.000 puestos' },
+      'Tucumán': { fiscal: '$89.000M (Serie oficial)', inversion: '$31.000M', comercio: '$680M', empleo: '280.000 puestos' },
+      'CABA': { fiscal: '$950.000M (Serie oficial)', inversion: '$380.000M', comercio: '$6.500M', empleo: '1.850.000 puestos' }
+    };
+
+    const info = pData[p] || { fiscal: 'Datos en proceso de carga oficial', inversion: 'Sin registro activo', comercio: 'En relevamiento', empleo: 'Actualización trimestral' };
+
+    d.innerHTML = '<h3>'+p+'</h3>'+
+      '<p>Ficha de datos oficiales y evolución regional.</p>'+
+      '<div class="tabs" id="provTabs">'+
+        '<button class="tab active" data-tab="resumen">Resumen</button>'+
+        '<button class="tab" data-tab="fiscal">Fiscal</button>'+
+        '<button class="tab" data-tab="inversion">Inversión</button>'+
+        '<button class="tab" data-tab="comercio">Comercio</button>'+
+        '<button class="tab" data-tab="empleo">Empleo</button>'+
+      '</div>'+
+      '<div class="rows" id="provRows">'+
+        '<div class="row"><span>Recursos tributarios provinciales<small>Fuente: Dirección de Recursos Provinciales</small></span><b>'+info.fiscal+'</b></div>'+
+        '<div class="row"><span>Recursos de origen nacional<small>Fuente: Ministerio de Economía</small></span><b>'+info.inversion+'</b></div>'+
+        '<div class="row"><span>Gasto y deuda provincial<small>Fuente: Mapa Fiscal</small></span><b>'+info.comercio+'</b></div>'+
+        '<div class="row"><span>Exportaciones de origen provincial<small>Fuente: INDEC</small></span><b>'+info.empleo+'</b></div>'+
+      '</div>'+
+      '<div style="background:var(--surface2); padding:15px; border-radius:12px; margin-top:15px;">'+
+        '<canvas id="provChart" style="max-height:200px; width:100%;"></canvas>'+
+      '</div>';
+
+    const containerRows = document.getElementById('provRows');
+    document.querySelectorAll('#provTabs .tab').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#provTabs .tab').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        const tabType = e.target.getAttribute('data-tab');
+
         if(tabType === 'resumen') {
           containerRows.innerHTML = 
             '<div class="row"><span>Recursos tributarios provinciales<small>Fuente: Dirección de Recursos Provinciales</small></span><b>'+info.fiscal+'</b></div>'+
@@ -180,10 +246,7 @@ function selectProvince(p,el){
       }
     }, 100);
   }
-}
-
-function setLayer(el,layer){document.querySelectorAll('#mapa .pill').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('layerLabel').textContent='Vista conceptual · '+({actividad:'actividad',inversion:'inversión',fiscal:'fiscal',export:'exportaciones'}[layer])}
-function renderInvestments(){const q=(document.getElementById('investmentSearch').value||'').toLowerCase();const list=investments.filter(x=>(x.name+x.company+x.province+x.sector).toLowerCase().includes(q));document.getElementById('investmentList').innerHTML=list.map(x=>'<div class="project"><div class="icon">🏗️</div><div><h4>'+x.name+'</h4><p>'+x.company+' · '+x.province+' · '+x.sector+'<br>'+x.amount+' · <a href="'+x.url+'" target="_blank" style="color:var(--blue2)">'+x.source+' ↗</a></p></div><span class="status">'+x.status+'</span></div>').join('')||'<div class="empty">No hay coincidencias.</div>'}
+}     
 function taxTab(type,el){document.querySelectorAll('#impuestos .pill').forEach(x=>x.classList.remove('active'));el.classList.add('active');const data={nacion:[['Recaudación tributaria nacional','$153.045.987 M','Acumulado enero-agosto 2026 · fuente oficial'],['Último mes','$20.508.537 M','Agosto 2026 · fuente oficial'],['Series históricas','Desde 1997','Desagregadas por mes']],provincia:[['Recursos tributarios provinciales','Serie 2026','Información mensual y trimestral · fuente oficial'],['Metodología','Publicada','La fuente replica datos de administraciones tributarias provinciales en la serie mensual'],['Series históricas','1984–2025','Excel y CSV disponibles']],distribucion:[['Recursos de origen nacional','Serie 2026','Incluye distribución a provincias'],['Coparticipación','Ley 23.548','La app distinguirá distribución primaria/secundaria según la fuente'],['Anticipos financieros','Registro normativo','Se mostrarán como financiamiento, no como recaudación']]}[type];document.getElementById('taxContent').innerHTML=data.map(x=>'<div class="card metric"><div class="label">'+x[0]+'</div><div class="value">'+x[1]+'</div><div class="sub">'+x[2]+'</div></div>').join('')}
 renderMap();renderInvestments();taxTab('nacion',document.querySelector('#impuestos .pill'));
 </script>
