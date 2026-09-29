@@ -1,3 +1,4 @@
+
 {
   "name": "Argentina Economía",
   "short_name": "Arg Economía",
@@ -6,5 +7,17 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1f2937",
-  "description": "Aplicación de datos económicos, fiscales e inversiones de Argentina."
+  "description": "Aplicación de datos económicos, fiscales e inversiones de Argentina.",
+  "icons": [
+    {
+      "src": "/argentina-economia/1790709093428.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/argentina-economia/1790709093428 (1).png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
 }
