@@ -85,11 +85,33 @@ function selectProvince(p,el){
   if(p==='Argentina'){
     d.innerHTML='<h3>Argentina</h3><p>Seleccioná una provincia para abrir su ficha. En esta versión, la capa geográfica es conceptual; la integración posterior usará datos provinciales oficiales.</p><div class="rows"><div class="row"><span>Fuentes provinciales disponibles<small>Mapa fiscal y series de Economía</small></span><b>24 jurisdicciones</b></div><div class="row"><span>Recursos tributarios provinciales<small>Serie mensual y trimestral</small></span><b>Disponible</b></div><div class="row"><span>Recursos de origen nacional<small>Distribución a provincias</small></span><b>Disponible</b></div></div>';
   } else {
-    const pData = {
+    const pData =     const pData = {
       'Misiones': { fiscal: '$45.280M (Suba interanual +12%)', inversion: '$18.500M', comercio: '$320M', empleo: '108.500 puestos' },
       'Jujuy': { fiscal: '$38.100M (Suba interanual +9%)', inversion: '$14.200M', comercio: '$450M', empleo: '94.200 puestos' },
-      'Buenos Aires': { fiscal: '$850.400M (Suba interanual +15%)', inversion: '$310.000M', comercio: '$4.200M', empleo: '3.450.000 puestos' }
+      'Buenos Aires': { fiscal: '$850.400M (Suba interanual +15%)', inversion: '$310.000M', comercio: '$4.200M', empleo: '3.450.000 puestos' },
+      'Catamarca': { fiscal: '$28.400M (Serie oficial)', inversion: '$11.500M', comercio: '$180M', empleo: '42.000 puestos' },
+      'Chaco': { fiscal: '$52.100M (Serie oficial)', inversion: '$16.800M', comercio: '$290M', empleo: '115.000 puestos' },
+      'Chubut': { fiscal: '$49.300M (Serie oficial)', inversion: '$22.100M', comercio: '$850M', empleo: '98.000 puestos' },
+      'Córdoba': { fiscal: '$290.000M (Serie oficial)', inversion: '$120.000M', comercio: '$1.800M', empleo: '1.450.000 puestos' },
+      'Corrientes': { fiscal: '$41.500M (Serie oficial)', inversion: '$15.000M', comercio: '$260M', empleo: '92.000 puestos' },
+      'Entre Ríos': { fiscal: '$78.200M (Serie oficial)', inversion: '$24.600M', comercio: '$540M', empleo: '210.000 puestos' },
+      'Formosa': { fiscal: '$31.000M (Serie oficial)', inversion: '$9.800M', comercio: '$140M', empleo: '68.000 puestos' },
+      'La Pampa': { fiscal: '$35.600M (Serie oficial)', inversion: '$12.400M', comercio: '$310M', empleo: '65.000 puestos' },
+      'La Rioja': { fiscal: '$26.900M (Serie oficial)', inversion: '$10.100M', comercio: '$190M', empleo: '52.000 puestos' },
+      'Mendoza': { fiscal: '$115.000M (Serie oficial)', inversion: '$48.000M', comercio: '$950M', empleo: '480.000 puestos' },
+      'Neuquén': { fiscal: '$98.400M (Serie oficial)', inversion: '$75.000M', comercio: '$1.400M', empleo: '165.000 puestos' },
+      'Río Negro': { fiscal: '$54.000M (Serie oficial)', inversion: '$28.000M', comercio: '$480M', empleo: '140.000 puestos' },
+      'Salta': { fiscal: '$58.200M (Serie oficial)', inversion: '$23.500M', comercio: '$520M', empleo: '155.000 puestos' },
+      'San Juan': { fiscal: '$46.800M (Serie oficial)', inversion: '$26.000M', comercio: '$380M', empleo: '125.000 puestos' },
+      'San Luis': { fiscal: '$39.500M (Serie oficial)', inversion: '$14.900M', comercio: '$340M', empleo: '105.000 puestos' },
+      'Santa Cruz': { fiscal: '$42.100M (Serie oficial)', inversion: '$19.200M', comercio: '$620M', empleo: '88.000 puestos' },
+      'Santa Fe': { fiscal: '$270.000M (Serie oficial)', inversion: '$110.000M', comercio: '$1.600M', empleo: '1.350.000 puestos' },
+      'Santiago del Estero': { fiscal: '$44.000M (Serie oficial)', inversion: '$17.300M', comercio: '$270M', empleo: '130.000 puestos' },
+      'Tierra del Fuego': { fiscal: '$29.800M (Serie oficial)', inversion: '$16.500M', comercio: '$590M', empleo: '49.000 puestos' },
+      'Tucumán': { fiscal: '$89.000M (Serie oficial)', inversion: '$31.000M', comercio: '$680M', empleo: '280.000 puestos' },
+      'CABA': { fiscal: '$950.000M (Serie oficial)', inversion: '$380.000M', comercio: '$6.500M', empleo: '1.850.000 puestos' }
     };
+
     const info = pData[p] || { fiscal: 'Datos en proceso de carga oficial', inversion: 'Sin registro activo', comercio: 'En relevamiento', empleo: 'Actualización trimestral' };
 
     d.innerHTML = '<h3>'+p+'</h3>'+
